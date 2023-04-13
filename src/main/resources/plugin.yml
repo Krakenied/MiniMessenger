@@ -1,0 +1,6 @@
+name: ${project.name}
+version: ${project.version}
+author: Krakenied
+website: https://github.com/Krakenied/MiniMessenger
+main: com.github.krakenied.minimessenger.MiniMessengerPlugin
+api-version: 1.19
