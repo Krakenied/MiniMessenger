@@ -120,4 +120,12 @@ public final class MiniMessenger {
     public void broadcastPrefixed(final @NotNull String key, final @NotNull TagResolver... tagResolvers) {
         this.plugin.getServer().broadcast(this.getComponentPrefixed(key, tagResolvers));
     }
+
+    public void sendActionBar(final @NotNull Audience audience, final @NotNull String key, final @NotNull TagResolver... tagResolvers) {
+        audience.sendActionBar(this.getComponent(key, tagResolvers));
+    }
+
+    public void sendActionBarPrefixed(final @NotNull Audience audience, final @NotNull String key, final @NotNull TagResolver... tagResolvers) {
+        audience.sendActionBar(this.getComponentPrefixed(key, tagResolvers));
+    }
 }
