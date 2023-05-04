@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.util.List;
 import java.util.logging.Level;
 
 @SuppressWarnings("unused")
@@ -89,16 +90,20 @@ public final class MiniMessenger {
         return true;
     }
 
-    public @NotNull String getCurrentPath(final @NotNull String key) {
+    public @NotNull List<String> getStringList(final @NotNull String key) {
+        return this.config.getStringList(key);
+    }
+
+    public @NotNull String getMessagePath(final @NotNull String key) {
         return String.join(".", this.messagesSection.getCurrentPath(), key);
     }
 
-    public @NotNull String getString(final @NotNull String key) {
-        return this.messagesSection.getString(key, this.getCurrentPath(key));
+    public @NotNull String getMessageString(final @NotNull String key) {
+        return this.messagesSection.getString(key, this.getMessagePath(key));
     }
 
     public @NotNull Component getComponent(final @NotNull String key, final @NotNull TagResolver... tagResolvers) {
-        return MiniMessage.miniMessage().deserialize(this.getString(key), tagResolvers);
+        return MiniMessage.miniMessage().deserialize(this.getMessageString(key), tagResolvers);
     }
 
     public @NotNull Component getComponentPrefixed(final @NotNull String key, final @NotNull TagResolver... tagResolvers) {
@@ -117,8 +122,16 @@ public final class MiniMessenger {
         this.plugin.getServer().broadcast(this.getComponent(key, tagResolvers));
     }
 
+    public void broadcast(final @NotNull String key, final @NotNull String permission, final @NotNull TagResolver... tagResolvers) {
+        this.plugin.getServer().broadcast(this.getComponent(key, tagResolvers), permission);
+    }
+
     public void broadcastPrefixed(final @NotNull String key, final @NotNull TagResolver... tagResolvers) {
         this.plugin.getServer().broadcast(this.getComponentPrefixed(key, tagResolvers));
+    }
+
+    public void broadcastPrefixed(final @NotNull String key, final @NotNull String permission, final @NotNull TagResolver... tagResolvers) {
+        this.plugin.getServer().broadcast(this.getComponentPrefixed(key, tagResolvers), permission);
     }
 
     public void sendActionBar(final @NotNull Audience audience, final @NotNull String key, final @NotNull TagResolver... tagResolvers) {
