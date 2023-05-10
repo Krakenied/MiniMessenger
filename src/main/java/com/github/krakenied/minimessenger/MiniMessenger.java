@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -90,6 +91,15 @@ public final class MiniMessenger {
         return true;
     }
 
+    public @NotNull String getPath(final @NotNull String key) {
+        return String.join(".", this.config.getCurrentPath(), key);
+    }
+
+    @SuppressWarnings("DataFlowIssue")
+    public @NotNull String getString(final @NotNull String key) {
+        return this.config.getString(key);
+    }
+
     public @NotNull List<String> getStringList(final @NotNull String key) {
         return this.config.getStringList(key);
     }
@@ -102,8 +112,22 @@ public final class MiniMessenger {
         return this.messagesSection.getString(key, this.getMessagePath(key));
     }
 
+    public @NotNull List<String> getMessageStringList(final @NotNull String key) {
+        return this.messagesSection.getStringList(key);
+    }
+
     public @NotNull Component getComponent(final @NotNull String key, final @NotNull TagResolver... tagResolvers) {
         return MiniMessage.miniMessage().deserialize(this.getMessageString(key), tagResolvers);
+    }
+
+    public @NotNull List<Component> getComponentList(final @NotNull String key, final @NotNull TagResolver... tagResolvers) {
+        final List<String> messageStringList = this.getMessageStringList(key);
+        final List<Component> componentList = new ArrayList<>();
+        for (final String messageString : messageStringList) {
+            final Component component = MiniMessage.miniMessage().deserialize(messageString, tagResolvers);
+            componentList.add(component);
+        }
+        return componentList;
     }
 
     public @NotNull Component getComponentPrefixed(final @NotNull String key, final @NotNull TagResolver... tagResolvers) {
