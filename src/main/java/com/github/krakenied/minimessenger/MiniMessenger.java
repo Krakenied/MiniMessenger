@@ -53,8 +53,8 @@ public final class MiniMessenger {
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public boolean reload() {
         if (!this.file.exists()) {
+            this.file.getParentFile().mkdirs();
             try (final InputStream inputStream = this.plugin.getResource(this.filename)) {
-                this.file.getParentFile().mkdirs();
                 Preconditions.checkArgument(inputStream != null, "resource cannot be null");
                 Files.copy(inputStream, this.file.toPath());
             } catch (final IllegalArgumentException | IOException | SecurityException e) {
@@ -95,9 +95,40 @@ public final class MiniMessenger {
         return String.join(".", this.config.getCurrentPath(), key);
     }
 
-    @SuppressWarnings("DataFlowIssue")
-    public @NotNull String getString(final @NotNull String key) {
-        return this.config.getString(key);
+    public @NotNull String getString(final @NotNull String key) throws IllegalStateException {
+        final Object value = this.config.get(key);
+        if (!(value instanceof final String valueString)) throw new IllegalStateException(key + " is null or not instanceof String");
+        return valueString;
+    }
+
+    public boolean getBoolean(final @NotNull String key) throws IllegalStateException {
+        final Object value = this.config.get(key);
+        if (!(value instanceof final Boolean valueBoolean)) throw new IllegalStateException(key + " is null or not instanceof Boolean");
+        return valueBoolean;
+    }
+
+    public int getInt(final @NotNull String key) throws IllegalStateException {
+        final Object value = this.config.get(key);
+        if (!(value instanceof final Integer valueInteger)) throw new IllegalStateException(key + " is null or not instanceof Integer");
+        return valueInteger;
+    }
+
+    public long getLong(final @NotNull String key) throws IllegalStateException {
+        final Object value = this.config.get(key);
+        if (!(value instanceof final Long valueLong)) throw new IllegalStateException(key + " is null or not instanceof Long");
+        return valueLong;
+    }
+
+    public float getFloat(final @NotNull String key) throws IllegalStateException {
+        final Object value = this.config.get(key);
+        if (!(value instanceof final Float valueFloat)) throw new IllegalStateException(key + " is null or not instanceof Float");
+        return valueFloat;
+    }
+
+    public double getDouble(final @NotNull String key) throws IllegalStateException {
+        final Object value = this.config.get(key);
+        if (!(value instanceof final Double valueDouble)) throw new IllegalStateException(key + " is null or not instanceof Double");
+        return valueDouble;
     }
 
     public @NotNull List<String> getStringList(final @NotNull String key) {
