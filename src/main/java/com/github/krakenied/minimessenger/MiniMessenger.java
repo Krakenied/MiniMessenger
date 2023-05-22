@@ -106,26 +106,26 @@ public final class MiniMessenger {
 
     public int getInt(final @NotNull String key) throws IllegalStateException {
         final Object value = this.config.get(key);
-        if (!(value instanceof final Integer valueInteger)) throw new IllegalStateException(key + " is null or not instanceof Integer");
-        return valueInteger;
+        if (!(value instanceof final Number valueNumber)) throw new IllegalStateException(key + " is null or not instanceof Number");
+        return valueNumber.intValue();
     }
 
     public long getLong(final @NotNull String key) throws IllegalStateException {
         final Object value = this.config.get(key);
-        if (!(value instanceof final Long valueLong)) throw new IllegalStateException(key + " is null or not instanceof Long");
-        return valueLong;
+        if (!(value instanceof final Number valueNumber)) throw new IllegalStateException(key + " is null or not instanceof Number");
+        return valueNumber.longValue();
     }
 
     public float getFloat(final @NotNull String key) throws IllegalStateException {
         final Object value = this.config.get(key);
-        if (!(value instanceof final Float valueFloat)) throw new IllegalStateException(key + " is null or not instanceof Float");
-        return valueFloat;
+        if (!(value instanceof final Number valueNumber)) throw new IllegalStateException(key + " is null or not instanceof Number");
+        return valueNumber.floatValue();
     }
 
     public double getDouble(final @NotNull String key) throws IllegalStateException {
         final Object value = this.config.get(key);
-        if (!(value instanceof final Double valueDouble)) throw new IllegalStateException(key + " is null or not instanceof Double");
-        return valueDouble;
+        if (!(value instanceof final Number valueNumber)) throw new IllegalStateException(key + " is null or not instanceof Number");
+        return valueNumber.doubleValue();
     }
 
     public @NotNull String getString(final @NotNull String key) throws IllegalStateException {
