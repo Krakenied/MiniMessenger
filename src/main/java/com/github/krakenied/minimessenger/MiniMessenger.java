@@ -136,7 +136,7 @@ public final class MiniMessenger {
 
     public @NotNull List<String> getStringList(final @NotNull String key) throws IllegalStateException {
         final Object value = this.config.get(key);
-        if (value instanceof List) throw new IllegalStateException(" is null or not instanceof List");
+        if (!(value instanceof List)) throw new IllegalStateException(key + " is null or not instanceof List");
         return this.config.getStringList(key);
     }
 
