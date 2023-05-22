@@ -1,10 +1,13 @@
 package com.github.krakenied.minimessenger;
 
 import com.google.common.base.Preconditions;
+import it.unimi.dsi.fastutil.objects.ReferenceArrayList;
+import it.unimi.dsi.fastutil.objects.ReferenceList;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -95,12 +98,6 @@ public final class MiniMessenger {
         return String.join(".", this.config.getCurrentPath(), key);
     }
 
-    public @NotNull String getString(final @NotNull String key) throws IllegalStateException {
-        final Object value = this.config.get(key);
-        if (!(value instanceof final String valueString)) throw new IllegalStateException(key + " is null or not instanceof String");
-        return valueString;
-    }
-
     public boolean getBoolean(final @NotNull String key) throws IllegalStateException {
         final Object value = this.config.get(key);
         if (!(value instanceof final Boolean valueBoolean)) throw new IllegalStateException(key + " is null or not instanceof Boolean");
@@ -131,8 +128,42 @@ public final class MiniMessenger {
         return valueDouble;
     }
 
-    public @NotNull List<String> getStringList(final @NotNull String key) {
+    public @NotNull String getString(final @NotNull String key) throws IllegalStateException {
+        final Object value = this.config.get(key);
+        if (!(value instanceof final String valueString)) throw new IllegalStateException(key + " is null or not instanceof String");
+        return valueString;
+    }
+
+    public @NotNull List<String> getStringList(final @NotNull String key) throws IllegalStateException {
+        final Object value = this.config.get(key);
+        if (value instanceof List) throw new IllegalStateException(" is null or not instanceof List");
         return this.config.getStringList(key);
+    }
+
+    public @NotNull Material getMaterial(final @NotNull String key) throws IllegalStateException {
+        final String materialString = this.getString(key);
+        final Material material;
+        try {
+            material = Material.valueOf(materialString);
+        } catch (final IllegalArgumentException e) {
+            throw new IllegalStateException(materialString + " is not a valid material", e);
+        }
+        return material;
+    }
+
+    public @NotNull List<Material> getMaterialList(final @NotNull String key) throws IllegalStateException {
+        final List<String> materialStringList = this.getStringList(key);
+        final ReferenceList<Material> materialList = new ReferenceArrayList<>();
+        for (final String materialString : materialStringList) {
+            final Material material;
+            try {
+                material = Material.valueOf(materialString);
+            } catch (final IllegalArgumentException e) {
+                throw new IllegalStateException(materialString + " is not a valid material", e);
+            }
+            materialList.add(material);
+        }
+        return materialList;
     }
 
     public @NotNull String getMessagePath(final @NotNull String key) {
